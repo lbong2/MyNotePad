@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing.Printing;
 using System.IO;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 
 namespace _01_zenix_notepad
 {
@@ -10,6 +12,9 @@ namespace _01_zenix_notepad
         bool coverFlag;
         string coverTitle;
         string coverText;
+
+        PageSettings ps = new PageSettings();
+        PrinterSettings pts = new PrinterSettings();
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -212,8 +217,8 @@ namespace _01_zenix_notepad
         /// <param name="e"></param>
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FontForm form2 = new FontForm();
-            form2.Show();
+            FontDialog fd = new FontDialog();   
+            fd.ShowDialog();
         }
 
         /// <summary>
@@ -279,9 +284,34 @@ namespace _01_zenix_notepad
 
         private void printToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
+
+
         }
 
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbox_note.Clear();
+        }
 
+        private void newWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MainForm newForm = new MainForm();
+            newForm.Show();
+        }
+
+        private void pageSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            PageSetupDialog psg = new PageSetupDialog();
+            psg.PageSettings = ps;
+            psg.PrinterSettings = pts;
+            psg.ShowDialog();
+
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.bing.com/search?q=windows%EC%9D%98+%EB%A9%94%EB%AA%A8%EC%9E%A5%EC%97%90+%EB%8C%80%ED%95%9C+%EB%8F%84%EC%9B%80%EB%A7%90+%EB%B3%B4%EA%B8%B0");
+        }
     }
 }
