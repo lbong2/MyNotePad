@@ -1,6 +1,6 @@
 ﻿namespace _01_zenix_notepad
 {
-    partial class Form2
+    partial class FontForm
     {
         /// <summary>
         /// Required designer variable.

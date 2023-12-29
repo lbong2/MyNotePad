@@ -12,9 +12,9 @@ using System.Windows.Forms;
 namespace _01_zenix_notepad
 {
     
-    public partial class Form2 : Form
+    public partial class FontForm : Form
     {
-        public Form2()
+        public FontForm()
         {
             InitializeComponent();
         }
