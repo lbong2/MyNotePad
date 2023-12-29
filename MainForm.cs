@@ -1,17 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 
 namespace _01_zenix_notepad
 {
+
     public partial class MainForm : Form
     {
+        bool coverFlag;
+        string coverTitle;
+        string coverText;
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            coverFlag = false;
+            coverText = "";
+            coverTitle = "";
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -27,6 +33,8 @@ namespace _01_zenix_notepad
 
         }
 
+        #region 상단 메뉴 "파일"
+
         /// <summary>
         /// 파일 > 끝내기 버튼 함수
         /// </summary>
@@ -35,6 +43,177 @@ namespace _01_zenix_notepad
         private void finishToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        /// <summary>
+        /// 파일 > 다른 이름으로 저장 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "텍스트 파일|*.txt|모든 파일|*.*";
+            saveFileDialog1.FilterIndex = 1;
+
+            // 대화상자를 닫기 전에 디렉토리를 이전에 선택한 디렉토리로
+            // 복원한지의 여부를 나타납니다.
+            saveFileDialog1.RestoreDirectory = true;
+
+            // 확장명을 입력하지 않을 때, 자동으로 확장자를 추가할 수 있습니다.
+            saveFileDialog1.AddExtension = true;
+            saveFileDialog1.DefaultExt = "txt";
+
+            // 파일이 이미 존재하면 덮어쓰기 할지를 묻는 대화상자를 표시합니다.
+            // 기본값: true
+            saveFileDialog1.OverwritePrompt = true;
+
+            // 저장할 위치의 초기 디렉토리를 설정합니다.
+            // Environment.CurrentDirectory: 현재 디렉토리를 나타냅니다.
+            saveFileDialog1.InitialDirectory = Environment.CurrentDirectory;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.Text = saveFileDialog1.FileName;
+                using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName))
+                {
+                    sw.Write(rtbox_note.Text);
+                    coverFlag = true;
+                    coverTitle = saveFileDialog1.FileName;
+                    coverText = rtbox_note.Text;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 파일 > 저장 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void coverToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (coverFlag)
+            {
+                using (StreamWriter sw = new StreamWriter(coverTitle))
+                {
+                    sw.Write(rtbox_note.Text);
+                }
+            }
+            else
+            {
+                SaveToolStripMenuItem_Click(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// 파일 > 열기 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "텍스트 파일|*.txt|모든 파일|*.*";
+            ofd.DefaultExt = "txt";
+            ofd.FilterIndex = 1;
+            ofd.Multiselect = false;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                this.Text = ofd.FileName;   // 폼의 타이틀
+                string[] textvalue = System.IO.File.ReadAllLines(ofd.FileName);
+                rtbox_note.Lines = textvalue;
+            }
+
+        }
+
+        #endregion
+
+        #region 상단 메뉴 "편집"
+
+        /// <summary>
+        /// 편집 > 실행 취소 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rtbox_note.CanUndo)
+                rtbox_note.Undo();
+            else rtbox_note.Redo();
+        }
+
+        /// <summary>
+        /// 편집 > 붙여넣기 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbox_note.Paste();
+        }
+
+        /// <summary>
+        /// 편집 > 모두 선택 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbox_note.SelectAll();
+        }
+
+        /// <summary>
+        /// 편집 > 잘라내기 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbox_note.Cut();
+        }
+
+        /// <summary>
+        /// 편집 > 복사 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbox_note.Copy();
+        }
+
+        /// <summary>
+        /// 편집 > 삭제 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// 편집 > 찾기 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region 상단 메뉴 "서식"
+        /// <summary>
+        /// 서식 > 글꼴 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FontForm form2 = new FontForm();
+            form2.Show();
         }
 
         /// <summary>
@@ -48,7 +227,9 @@ namespace _01_zenix_notepad
             rtbox_note.WordWrap = !rtbox_note.WordWrap;
 
         }
+        #endregion
 
+        #region 상단 메뉴 "보기"
         /// <summary>
         /// 보기 > 확대 함수
         /// </summary>
@@ -92,80 +273,15 @@ namespace _01_zenix_notepad
         {
             statusStrip1.Visible = !statusStrip1.Visible;
         }
-        /// <summary>
-        /// 서식 > 글꼴 함수
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FontForm form2 = new FontForm();
-            form2.Show();
-        }
+        #endregion
 
-        private void rtbox_note_MouseDown(object sender, MouseEventArgs e)
-        {
 
-        }
-        /// <summary>
-        /// 편집 > 실행 취소 함수
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (rtbox_note.CanUndo)
-                rtbox_note.Undo();
-            else rtbox_note.Redo();
-        }
-        /// <summary>
-        /// 편집 > 붙여넣기 함수
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            rtbox_note.Paste();
-        }
-        /// <summary>
-        /// 편집 > 모두 선택 함수
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            rtbox_note.SelectAll();
-        }
 
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            rtbox_note.Cut();
-        }
-
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            rtbox_note.Copy();
-        }
-
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void searchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-        #region 여기서 부터 묶을 거임
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender">이것은 무슨 파라미터 입니다 </param>
-        /// <param name="e"></param>
         private void printToolStripMenuItem_Click(object sender, EventArgs e)
         {
            
         }
-        #endregion
+
 
     }
 }
