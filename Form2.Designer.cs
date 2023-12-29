@@ -34,7 +34,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lbox_font = new System.Windows.Forms.ListBox();
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.listBox3 = new System.Windows.Forms.ListBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -97,19 +97,26 @@
             this.textBox3.Size = new System.Drawing.Size(78, 21);
             this.textBox3.TabIndex = 5;
             // 
-            // listBox1
+            // lbox_font
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(15, 70);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 88);
-            this.listBox1.TabIndex = 6;
+            this.lbox_font.FormattingEnabled = true;
+            this.lbox_font.ItemHeight = 12;
+            this.lbox_font.Location = new System.Drawing.Point(15, 70);
+            this.lbox_font.Name = "lbox_font";
+            this.lbox_font.Size = new System.Drawing.Size(120, 88);
+            this.lbox_font.TabIndex = 6;
             // 
             // listBox2
             // 
             this.listBox2.FormattingEnabled = true;
             this.listBox2.ItemHeight = 12;
+            this.listBox2.Items.AddRange(new object[] {
+            "가늘게",
+            "보통",
+            "굵게",
+            "가는 기울임꼴",
+            "기울임꼴",
+            "굵은 기울임꼴"});
             this.listBox2.Location = new System.Drawing.Point(165, 70);
             this.listBox2.Name = "listBox2";
             this.listBox2.Size = new System.Drawing.Size(120, 88);
@@ -119,15 +126,35 @@
             // 
             this.listBox3.FormattingEnabled = true;
             this.listBox3.ItemHeight = 12;
+            this.listBox3.Items.AddRange(new object[] {
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "14",
+            "16",
+            "18",
+            "20",
+            "22",
+            "24",
+            "26",
+            "28",
+            "36",
+            "48",
+            "72"});
             this.listBox3.Location = new System.Drawing.Point(314, 70);
             this.listBox3.Name = "listBox3";
-            this.listBox3.Size = new System.Drawing.Size(120, 88);
+            this.listBox3.Size = new System.Drawing.Size(78, 88);
             this.listBox3.TabIndex = 8;
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(312, 322);
+            this.comboBox1.Items.AddRange(new object[] {
+            "영어",
+            "한글"});
+            this.comboBox1.Location = new System.Drawing.Point(244, 330);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 20);
             this.comboBox1.TabIndex = 9;
@@ -136,7 +163,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label4.Location = new System.Drawing.Point(311, 302);
+            this.label4.Location = new System.Drawing.Point(243, 310);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(79, 17);
             this.label4.TabIndex = 10;
@@ -144,7 +171,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(336, 415);
+            this.button1.Location = new System.Drawing.Point(244, 415);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 11;
@@ -153,7 +180,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(417, 415);
+            this.button2.Location = new System.Drawing.Point(325, 415);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 12;
@@ -163,7 +190,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Location = new System.Drawing.Point(314, 176);
+            this.groupBox1.Location = new System.Drawing.Point(246, 184);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(146, 100);
             this.groupBox1.TabIndex = 13;
@@ -183,7 +210,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 450);
+            this.ClientSize = new System.Drawing.Size(405, 450);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -191,7 +218,7 @@
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.listBox3);
             this.Controls.Add(this.listBox2);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.lbox_font);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
@@ -200,6 +227,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Form2";
             this.Text = "글꼴";
+            this.Load += new System.EventHandler(this.Form2_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -215,7 +243,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lbox_font;
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.ListBox listBox3;
         private System.Windows.Forms.ComboBox comboBox1;

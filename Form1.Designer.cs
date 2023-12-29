@@ -371,6 +371,7 @@
             this.rtbox_note.TabIndex = 1;
             this.rtbox_note.Text = "";
             this.rtbox_note.MouseClick += new System.Windows.Forms.MouseEventHandler(this.rtbox_note_MouseClick);
+            this.rtbox_note.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rtbox_note_MouseDown);
             // 
             // statusStrip1
             // 

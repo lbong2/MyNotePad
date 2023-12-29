@@ -24,7 +24,7 @@ namespace _01_zenix_notepad
         /// <param name="e"></param>
         private void rtbox_note_MouseClick(object sender, MouseEventArgs e)
         {
-            
+
         }
         /// <summary>
         /// 파일 > 끝내기 버튼 함수
@@ -81,6 +81,11 @@ namespace _01_zenix_notepad
         {
             Form2 form2 = new Form2();
             form2.Show();
+        }
+
+        private void rtbox_note_MouseDown(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }
