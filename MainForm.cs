@@ -87,6 +87,7 @@ namespace _01_zenix_notepad
                     coverFlag = true;
                     coverTitle = saveFileDialog1.FileName;
                     coverText = rtbox_note.Text;
+                    this.Text = coverTitle;
                 }
             }
         }
@@ -103,6 +104,7 @@ namespace _01_zenix_notepad
                 using (StreamWriter sw = new StreamWriter(coverTitle))
                 {
                     sw.Write(rtbox_note.Text);
+                    this.Text = coverTitle;
                 }
             }
             else
@@ -312,6 +314,15 @@ namespace _01_zenix_notepad
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.bing.com/search?q=windows%EC%9D%98+%EB%A9%94%EB%AA%A8%EC%9E%A5%EC%97%90+%EB%8C%80%ED%95%9C+%EB%8F%84%EC%9B%80%EB%A7%90+%EB%B3%B4%EA%B8%B0");
+        }
+
+        private void rtbox_note_TextChanged(object sender, EventArgs e)
+        {
+            if (this.Text[0] != '*')
+            {
+                this.Text = "* " + this.Text;
+            }
+
         }
     }
 }
