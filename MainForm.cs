@@ -41,6 +41,42 @@ namespace _01_zenix_notepad
         #region 상단 메뉴 "파일"
 
         /// <summary>
+        /// 파일 > 새로 만들기 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rtbox_note.Clear();
+        }
+
+        /// <summary>
+        /// 파일 > 새 창 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void newWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MainForm newForm = new MainForm();
+            newForm.Show();
+        }
+
+        /// <summary>
+        /// 파일 > 페이지 설정 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pageSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            PageSetupDialog psg = new PageSetupDialog();
+            psg.PageSettings = ps;
+            psg.PrinterSettings = pts;
+            psg.ShowDialog();
+
+        }
+
+        /// <summary>
         /// 파일 > 끝내기 버튼 함수
         /// </summary>
         /// <param name="sender"></param>
@@ -177,8 +213,9 @@ namespace _01_zenix_notepad
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        {       
             rtbox_note.Cut();
+
         }
 
         /// <summary>
@@ -198,6 +235,7 @@ namespace _01_zenix_notepad
         /// <param name="e"></param>
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            rtbox_note.SelectedText = "";
         }
 
         /// <summary>
@@ -220,7 +258,28 @@ namespace _01_zenix_notepad
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FontDialog fd = new FontDialog();   
-            fd.ShowDialog();
+
+
+            fd.ShowColor = true;
+
+            fd.Font = rtbox_note.Font;      // FontDialog를 열었을 때 현재 폰트와 색상이 어떤것인지 보여주기 위함.
+            fd.Color = rtbox_note.ForeColor;    // Dialog에서 폰트 설정 요청이 성공했을 때 할 처리</p>
+
+            if (fd.ShowDialog() == DialogResult.OK)
+            {
+
+                if ("".Equals(rtbox_note.SelectedText))
+                {
+                    rtbox_note.ForeColor = fd.Color;
+                    rtbox_note.Font = fd.Font;
+                }
+                else
+                {
+                    rtbox_note.SelectionColor = fd.Color;
+                    rtbox_note.SelectionFont = fd.Font;
+
+                }
+            }
         }
 
         /// <summary>
@@ -290,32 +349,23 @@ namespace _01_zenix_notepad
 
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            rtbox_note.Clear();
-        }
 
-        private void newWindowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MainForm newForm = new MainForm();
-            newForm.Show();
-        }
 
-        private void pageSetupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            PageSetupDialog psg = new PageSetupDialog();
-            psg.PageSettings = ps;
-            psg.PrinterSettings = pts;
-            psg.ShowDialog();
-
-        }
-
+        /// <summary>
+        /// 도움말 > 도움말 보기 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.bing.com/search?q=windows%EC%9D%98+%EB%A9%94%EB%AA%A8%EC%9E%A5%EC%97%90+%EB%8C%80%ED%95%9C+%EB%8F%84%EC%9B%80%EB%A7%90+%EB%B3%B4%EA%B8%B0");
         }
 
+        /// <summary>
+        /// 텍스트 변경 시 form에 * 붙이는 함수 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rtbox_note_TextChanged(object sender, EventArgs e)
         {
             if (this.Text[0] != '*')
@@ -323,6 +373,59 @@ namespace _01_zenix_notepad
                 this.Text = "* " + this.Text;
             }
 
+        }
+
+        /// <summary>
+        /// 선택 영역 변경 감지 함수 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rtbox_note_SelectionChanged(object sender, EventArgs e)
+        {
+            if (!"".Equals(rtbox_note.SelectedText))
+            {
+                cutToolStripMenuItem.Enabled = true;
+                copyToolStripMenuItem.Enabled = true;
+                deleteToolStripMenuItem.Enabled = true; 
+                bingToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                cutToolStripMenuItem.Enabled = false;
+                copyToolStripMenuItem.Enabled = false;
+                deleteToolStripMenuItem.Enabled = false;
+                bingToolStripMenuItem.Enabled = false;
+            }
+        }
+        /// <summary>
+        /// 편집 > 시간/날짜 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void datetimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            rtbox_note.AppendText(now.ToString("tt h:mm yyyy-MM-dd"));
+        }
+
+        /// <summary>
+        /// 편집 > bing으로 검색 함수
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.bing.com/search?q=" + rtbox_note.SelectedText);
+
+        }
+
+        private void rtbox_note_MouseUp(object sender, MouseEventArgs e)
+        {
+            System.Drawing.Point point= new System.Drawing.Point(e.X, e.Y);
+            if(e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(point);
+            }
         }
     }
 }
